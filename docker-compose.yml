@@ -1,0 +1,42 @@
+# 최종 docker-compose.yml
+# 발견된 실제 드라이버 경로 반영
+
+services:
+  vllm-server:
+    build:
+      # 현재 디렉토리의 Dockerfile을 사용하여 이미지를 빌드합니다.
+      context: ./vllm
+#    runtime: nvidia
+    
+    # 1. 호스트의 GPU 장치들을 컨테이너에 직접 연결합니다.
+    #    vLLM이 하드웨어에 접근할 수 있도록 해줍니다.
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidia1:/dev/nvidia1
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
+      - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
+
+    # 2. 호스트의 NVIDIA 관련 파일 및 캐시 폴더를 마운트합니다.
+    volumes:
+      # [가장 중요] ldconfig로 확인한 실제 드라이버 라이브러리 경로를
+      # 읽기 전용(:ro)으로 마운트합니다.
+      - /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:ro
+
+      # [선택 사항] 컨테이너 내부에서 nvidia-smi 명령어를 사용하기 위해 마운트합니다.
+      - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi:ro
+
+      # [권장 사항] HuggingFace 모델 캐시를 호스트에 저장하여
+      # 컨테이너를 다시 만들어도 모델을 다시 다운로드하지 않도록 합니다.
+      - ./huggingface_cache:/root/.cache/huggingface
+
+    # 호스트의 13333 포트를 컨테이너의 8000 포트로 연결합니다.
+    ports:
+      - "13333:8000"
+    environment:
+      # .env 파일에서 VLLM_API_KEY 값을 가져와 컨테이너 환경 변수로 설정합니다.
+      - VLLM_API_KEY=${VLLM_API_KEY}
+      
+    # 여러 GPU 사용 시, 프로세스 간 통신 성능을 위해
+    # 호스트의 공유 메모리를 사용하도록 설정합니다. (필수 권장)
+    ipc: host

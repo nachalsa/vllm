@@ -1,0 +1,24 @@
+{#- DeepSeek Coder v2 + Continue 전용 메시지 템플릿 -#}
+{%- for message in messages -%}
+  {%- if message.get('role') == 'system' -%}
+    {{- message.get('content', '').strip() -}}
+    {%- if not loop.last -%}{{- '\n\n' -}}{%- endif -%}
+  
+  {%- elif message.get('role') == 'user' -%}
+    {{- 'Human: ' + message.get('content', '').strip() -}}
+    {%- if not loop.last -%}{{- '\n\n' -}}{%- endif -%}
+  
+  {%- elif message.get('role') == 'assistant' -%}
+    {{- 'Assistant: ' + message.get('content', '').strip() -}}
+    {%- if eos_token is defined and eos_token -%}{{- eos_token -}}{%- endif -%}
+    {%- if not loop.last -%}{{- '\n\n' -}}{%- endif -%}
+  
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if add_generation_prompt -%}
+  {%- if messages and messages[-1].get('role') != 'assistant' -%}
+    {%- if messages -%}{{- '\n\n' -}}{%- endif -%}
+    {{- 'Assistant:' -}}
+  {%- endif -%}
+{%- endif -%}
