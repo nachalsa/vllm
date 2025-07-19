@@ -29,13 +29,14 @@ python3 -m vllm.entrypoints.openai.api_server \
     --load-format safetensors \
     --tool-call-parser mistral \
     --enable-auto-tool-choice \
-    --tensor-parallel-size 1 \
-    --gpu-memory-utilization 0.285 \
-    --max-model-len 32768 \
+    --tensor-parallel-size 2 \
+    --gpu-memory-utilization 0.375 \
+    --max-model-len 128000 \
     --host 0.0.0.0 \
     --port 8000 \
-    --quantization awq \
-    ${API_KEY_ARG}
+    --quantization awq_marlin \
+    --dtype bfloat16 \
     --trust-remote-code \
+    ${API_KEY_ARG}
 
 echo "[Entrypoint] vLLM server process has been launched."
