@@ -22,6 +22,8 @@ else
     echo "[Entrypoint] No API Key detected. Starting vLLM server without authentication."
 fi
 
+#gpu 2개 분산 각각 21982MiB 사용
+#모델로드에 각각 6.6626 GiB 사용
 python3 -m vllm.entrypoints.openai.api_server \
     --model "cpatonn/Devstral-Small-2507-AWQ" \
     --tokenizer-mode mistral \
