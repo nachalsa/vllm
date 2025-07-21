@@ -22,8 +22,9 @@ else
     echo "[Entrypoint] No API Key detected. Starting vLLM server without authentication."
 fi
 
-#gpu 2개 분산 각각 21982MiB 사용
-#모델로드에 각각 6.6626 GiB 사용
+#gpu 2개 분산 각각 21982MiB 사용 -> 1개 38110MiB 사용
+#모델로드에 각각 6.6626 GiB -> 1개 13.3162 GiB 사용
+#2개 평균 50.7829초 -> 1개 평균 81.0040초
 python3 -m vllm.entrypoints.openai.api_server \
     --model "cpatonn/Devstral-Small-2507-AWQ" \
     --tokenizer-mode mistral \
@@ -39,6 +40,8 @@ python3 -m vllm.entrypoints.openai.api_server \
     --quantization awq_marlin \
     --dtype bfloat16 \
     --trust-remote-code \
-    ${API_KEY_ARG}
+    ${API_KEY_ARG} \
+    --ssl-keyfile /app/server.key \
+    --ssl-certfile /app/server.crt \
 
 echo "[Entrypoint] vLLM server process has been launched."

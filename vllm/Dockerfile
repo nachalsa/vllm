@@ -9,6 +9,7 @@ RUN apt-get update && \
 # 3. vLLM 설치
 RUN pip3 install --no-cache-dir vllm
 
+
 # 작업 디렉토리를 /app 으로 설정
 WORKDIR /app
 
@@ -16,9 +17,12 @@ WORKDIR /app
 COPY entrypoint.sh .
 COPY templates ./templates/
 
-# 4. API 서버 포트 노출 (컨테이너 내부 포트는 8000 그대로 사용)
+# SSL/TLS 인증서와 키 파일을 컨테이너에 복사
+COPY server.crt /app/server.crt
+COPY server.key /app/server.key
+
+# API 서버 포트 노출 (컨테이너 내부 포트는 8000 그대로 사용)
 EXPOSE 8000
 
 # 컨테이너가 시작될 때 entrypoint.sh 스크립트를 실행하도록 설정
 ENTRYPOINT ["/app/entrypoint.sh"]
-
