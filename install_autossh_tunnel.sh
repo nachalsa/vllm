@@ -47,7 +47,7 @@ After=network-online.target
 
 [Service]
 User=${LOCAL_USER}
-ExecStart=${AUTOSSH_EXEC} -M 0 -N -L ${LOCAL_PORT}:${REMOTE_TARGET_HOST}:${REMOTE_TARGET_PORT} ${REMOTE_HOST_ALIAS}
+ExecStart=${AUTOSSH_EXEC} -M 0 -N -L ${LOCAL_PORT}:${REMOTE_TARGET_HOST}:${REMOTE_TARGET_PORT} -F /home/${LOCAL_USER}/.ssh/config ${REMOTE_HOST_ALIAS}
 Restart=always
 RestartSec=10
 StandardOutput=syslog
