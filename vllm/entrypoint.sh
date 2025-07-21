@@ -41,7 +41,5 @@ python3 -m vllm.entrypoints.openai.api_server \
     --dtype bfloat16 \
     --trust-remote-code \
     ${API_KEY_ARG} \
-    --ssl-keyfile /app/server.key \
-    --ssl-certfile /app/server.crt \
 
 echo "[Entrypoint] vLLM server process has been launched."

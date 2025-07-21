@@ -17,10 +17,6 @@ WORKDIR /app
 COPY entrypoint.sh .
 COPY templates ./templates/
 
-# SSL/TLS 인증서와 키 파일을 컨테이너에 복사
-COPY server.crt /app/server.crt
-COPY server.key /app/server.key
-
 # API 서버 포트 노출 (컨테이너 내부 포트는 8000 그대로 사용)
 EXPOSE 8000
 
