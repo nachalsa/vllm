@@ -8,9 +8,14 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-
-sudo apt update
-sudo apt install autossh
+# --- autossh 설치 확인 ---
+AUTOSSH_EXEC=$(which autossh)
+if [ -z "${AUTOSSH_EXEC}" ]; then
+    echo "오류: 'autossh' 실행 파일을 찾을 수 없습니다."
+    echo "autossh가 설치되어 있고, PATH에 포함되어 있는지 확인하세요."
+    echo "설치되어 있지 않다면, 'sudo apt install autossh' 또는 'sudo yum install autossh' 등으로 설치하세요."
+    exit 1
+fi
 
 # --- 설정 변수 (이 부분들을 실제 환경에 맞게 수정하세요) ---
 SERVICE_NAME="autossh-vllm-tunnel.service"
