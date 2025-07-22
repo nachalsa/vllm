@@ -48,6 +48,7 @@ After=network-online.target
 [Service]
 User=${LOCAL_USER}
 ExecStart=${AUTOSSH_EXEC} -M 0 -N -L ${LOCAL_PORT}:${REMOTE_TARGET_HOST}:${REMOTE_TARGET_PORT} ${REMOTE_HOST_ALIAS}
+Environment="AUTOSSH_GATETIME=0"
 Restart=always
 RestartSec=10
 StandardOutput=syslog
