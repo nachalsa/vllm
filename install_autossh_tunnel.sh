@@ -25,7 +25,7 @@ REMOTE_HOST_ALIAS="gpuserver_alias" # ~/.ssh/config에 정의된 호스트 별�
 REMOTE_TARGET_HOST="localhost"  # gpuserver 내부에서 vLLM이 리스닝하는 호스트 (대부분 localhost)
 REMOTE_TARGET_PORT="12345"      # gpuserver 내부에서 vLLM이 리스닝하는 포트 (docker-compose에 명시된 포트)
 AUTOSSH_EXEC=$(which autossh)   # 일반적으로 /usr/bin/autossh
-LOCAL_USER=$(whoami)            # 현재 스크립트를 실행하는 사용자 (systemd 서비스의 User)
+LOCAL_USER=${SUDO_USER:-$(logname)} # 현재 스크립트를 실행하는 사용자 (systemd 서비스의 User)
 
 # --- SSH 설정 파일 (~/.ssh/config) 설정 안내 ---
 echo "--- SSH Config 설정 안내 ---"
@@ -47,7 +47,7 @@ After=network-online.target
 
 [Service]
 User=${LOCAL_USER}
-ExecStart=${AUTOSSH_EXEC} -M 0 -N -L ${LOCAL_PORT}:${REMOTE_TARGET_HOST}:${REMOTE_TARGET_PORT} -F /home/${LOCAL_USER}/.ssh/config ${REMOTE_HOST_ALIAS}
+ExecStart=${AUTOSSH_EXEC} -M 0 -N -L ${LOCAL_PORT}:${REMOTE_TARGET_HOST}:${REMOTE_TARGET_PORT} ${REMOTE_HOST_ALIAS}
 Restart=always
 RestartSec=10
 StandardOutput=syslog
