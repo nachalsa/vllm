@@ -21,7 +21,7 @@ fi
 SERVICE_NAME="autossh-vllm-tunnel.service"
 SYSTEMD_DIR="/etc/systemd/system"
 LOCAL_PORT="54321"              # 로컬 PC에서 열릴 포트
-REMOTE_HOST_ALIAS="gpuserver_alias" # ~/.ssh/config에 정의된 호스트 별칭
+REMOTE_HOST_ALIAS="gpuserver" # ~/.ssh/config에 정의된 호스트 별칭
 REMOTE_TARGET_HOST="localhost"  # gpuserver 내부에서 vLLM이 리스닝하는 호스트 (대부분 localhost)
 REMOTE_TARGET_PORT="12345"      # gpuserver 내부에서 vLLM이 리스닝하는 포트 (docker-compose에 명시된 포트)
 AUTOSSH_EXEC=$(which autossh)   # 일반적으로 /usr/bin/autossh
