@@ -26,20 +26,21 @@ fi
 #모델로드에 각각 6.6626 GiB -> 1개 13.3162 GiB 사용
 #2개 평균 50.7829초 -> 1개 평균 81.0040초
 python3 -m vllm.entrypoints.openai.api_server \
-    --model "cpatonn/Devstral-Small-2507-AWQ" \
-    --tokenizer-mode mistral \
+    --model "Qwen/Qwen3-14B-AWQ" \
+    --tokenizer-mode auto \
     --config-format hf \
     --load-format safetensors \
-    --tool-call-parser mistral \
-    --enable-auto-tool-choice \
+    --enable-reasoning \
+    --reasoning-parser deepseek_r1 \
     --tensor-parallel-size 2 \
-    --gpu-memory-utilization 0.375 \
-    --max-model-len 128000 \
+    --gpu-memory-utilization 0.4 \
+    --max-model-len 131072 \
+    --rope-scaling '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}' \
     --host 0.0.0.0 \
     --port 8000 \
     --quantization awq_marlin \
     --dtype bfloat16 \
     --trust-remote-code \
-    ${API_KEY_ARG} \
+    ${API_KEY_ARG}
 
 echo "[Entrypoint] vLLM server process has been launched."
